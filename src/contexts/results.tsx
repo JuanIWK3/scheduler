@@ -20,10 +20,7 @@ type ResultsContextType = {
   };
   setResults: Dispatch<
     SetStateAction<{
-      fcfs: Result;
-      sjf: Result;
-      srtf: Result;
-      rr: Result;
+      [key: string]: Result;
     }>
   >;
 };
