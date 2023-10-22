@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Process } from "@/types";
+import { ProgressBar } from "./progress";
 
 const initialProcesses: Process[] = [
   { id: 1, name: "P1", duration: 5, progress: 0, arrivalTime: 0 },
@@ -47,31 +48,10 @@ export const Sjf = () => {
         .sort((a, b) => a.id - b.id)
         .map((process) => (
           <div key={process.name} className="border-b">
-            {process.name}{" "}
-            <ProgressBar
-              duration={process.duration}
-              progress={process.progress}
-            />
+            <ProgressBar process={process} />
           </div>
         ))}
       Total Time Taken: {time}
-    </div>
-  );
-};
-
-const ProgressBar = ({
-  duration,
-  progress,
-}: {
-  duration: number;
-  progress: number;
-}) => {
-  return (
-    <div className="w-full h-4 bg-gray-200 rounded">
-      <div
-        className="h-full bg-green-500 rounded transition-all duration-1000"
-        style={{ width: `${(progress / duration) * 100}%` }}
-      ></div>
     </div>
   );
 };
