@@ -1,6 +1,8 @@
 "use client";
 
 import { Fcfs } from "@/components/fcfs";
+import { Results } from "@/components/results";
+import { RR } from "@/components/rr";
 import { Sjf } from "@/components/sjf";
 import { Srtf } from "@/components/srtf";
 import {
@@ -12,6 +14,7 @@ import {
   SelectLabel,
   SelectItem,
 } from "@/components/ui/select";
+import { ResultsProvider } from "@/contexts/results";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -20,9 +23,11 @@ type Scheduler = {
   value: string;
 };
 
+// Página Inicial
 export default function Home() {
   const [selectedScheduler, setSelectedScheduler] = useState<Scheduler>();
 
+  // Array de escalonadores
   const schedulers: Scheduler[] = [
     {
       name: "First Come First Serve",
@@ -46,37 +51,19 @@ export default function Home() {
     },
   ];
 
+  // Html retornado
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <h1 className="text-xl font-bold">Scheduler</h1>
-      <Select
-        onValueChange={(value) => {
-          const scheduler = schedulers.find(
-            (scheduler) => scheduler.value === value
-          );
-          setSelectedScheduler(scheduler);
-        }}
-      >
-        <SelectTrigger className="">
-          <SelectValue placeholder="Select a scheduler" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Scheduler</SelectLabel>
-            {schedulers.map((scheduler) => (
-              <SelectItem key={scheduler.value} value={scheduler.value}>
-                {scheduler.name}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
-      {selectedScheduler?.value === "fcfs" && <Fcfs />}
-      {selectedScheduler?.value === "sjf" && <Sjf />}
-      {selectedScheduler?.value === "srtf" && <Srtf />}
-      {selectedScheduler?.value === "priority" && <Fcfs />}
-      {selectedScheduler?.value === "rr" && <Fcfs />}
+    <main className="flex min-h-screen gap-16 flex-col items-center p-24">
+      <h1 className="text-xl font-bold">Escalonadores</h1>
+      <ResultsProvider>
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 lg:grid-cols-3">
+          <Fcfs />
+          <Sjf />
+          <Srtf />
+          <RR />
+        </div>
+        <Results />
+      </ResultsProvider>
     </main>
   );
 }

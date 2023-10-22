@@ -1,8 +1,9 @@
 import { Process } from "@/types";
 
+// Componente de progresso para os processos
 export const ProgressBar = ({ process }: { process: Process }) => {
   return (
-    <div className="">
+    <>
       <div className="flex w-full justify-between">
         <p>{process.name}</p>
         <p>
@@ -15,6 +16,6 @@ export const ProgressBar = ({ process }: { process: Process }) => {
           style={{ width: `${(process.progress / process.duration) * 100}%` }}
         ></div>
       </div>
-    </div>
+    </>
   );
 };

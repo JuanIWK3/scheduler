@@ -3,18 +3,22 @@
 import { useEffect, useState } from "react";
 import { Process } from "@/types";
 import { ProgressBar } from "./progress";
-
-const initialProcesses: Process[] = [
-  { id: 1, name: "P1", duration: 5, progress: 0, arrivalTime: 3 },
-  { id: 2, name: "P2", duration: 3, progress: 0, arrivalTime: 3 },
-  { id: 3, name: "P3", duration: 8, progress: 0, arrivalTime: 0 },
-  { id: 4, name: "P4", duration: 6, progress: 0, arrivalTime: 3 },
-  { id: 5, name: "P5", duration: 2, progress: 0, arrivalTime: 3 },
-];
+import { processosBasicos } from "@/app/processos";
+import { useResults } from "@/contexts/results";
 
 export const Srtf = () => {
   const [time, setTime] = useState(0);
-  const [processes, setProcesses] = useState<Process[]>(initialProcesses);
+  const [processes, setProcesses] = useState<Process[]>(processosBasicos);
+  const { setResults } = useResults();
+
+  const finish = () => {
+    setResults((results) => ({
+      ...results,
+      srtf: {
+        tempoMedio: time / processes.length,
+      },
+    }));
+  };
 
   const findShortestRemainingTime = (processes: Process[]) => {
     const sortedProcesses = processes.sort(
@@ -50,6 +54,7 @@ export const Srtf = () => {
       processes.sort((a, b) => a.duration - b.duration);
 
       if (processes.every((process) => process.progress === process.duration)) {
+        finish();
         clearInterval(interval);
         return;
       }
@@ -57,8 +62,6 @@ export const Srtf = () => {
       setTime((time) => time + 1);
 
       const firstProcess = findShortestRemainingTime(processes);
-
-      console.log(firstProcess, time);
 
       if (firstProcess) {
         firstProcess.progress++;
@@ -70,6 +73,7 @@ export const Srtf = () => {
 
   return (
     <div className="w-full mt-8 gap-4 flex flex-col">
+      <h2 className="text-lg font-bold">Shortest Remaining Time First</h2>
       {processes
         .sort((a, b) => a.id - b.id)
         .map((process) => (
@@ -78,8 +82,6 @@ export const Srtf = () => {
           </div>
         ))}
       Total Time Taken: {time}
-      <hr />
-      {JSON.stringify(processes)}
     </div>
   );
 };
