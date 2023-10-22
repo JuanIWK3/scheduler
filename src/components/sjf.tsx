@@ -1,8 +1,7 @@
 "use client";
 
-import { Process } from "@/schedulers/fcfs";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
+import { Process } from "@/types";
 
 const initialProcesses: Process[] = [
   { id: 1, name: "P1", duration: 5, progress: 0, arrivalTime: 0 },
