@@ -5,16 +5,45 @@ import { Process } from "@/types";
 import { ProgressBar } from "./progress";
 
 const initialProcesses: Process[] = [
-  { id: 1, name: "P1", duration: 5, progress: 0, arrivalTime: 0 },
-  { id: 2, name: "P2", duration: 3, progress: 0, arrivalTime: 0 },
+  { id: 1, name: "P1", duration: 5, progress: 0, arrivalTime: 3 },
+  { id: 2, name: "P2", duration: 3, progress: 0, arrivalTime: 3 },
   { id: 3, name: "P3", duration: 8, progress: 0, arrivalTime: 0 },
-  { id: 4, name: "P4", duration: 6, progress: 0, arrivalTime: 0 },
-  { id: 5, name: "P5", duration: 2, progress: 0, arrivalTime: 0 },
+  { id: 4, name: "P4", duration: 6, progress: 0, arrivalTime: 3 },
+  { id: 5, name: "P5", duration: 2, progress: 0, arrivalTime: 3 },
 ];
 
-export const Sjf = () => {
+export const Srtf = () => {
   const [time, setTime] = useState(0);
   const [processes, setProcesses] = useState<Process[]>(initialProcesses);
+
+  const findShortestRemainingTime = (processes: Process[]) => {
+    const sortedProcesses = processes.sort(
+      (a, b) => a.arrivalTime - b.arrivalTime
+    );
+
+    const firstProcess = sortedProcesses.find(
+      (process) =>
+        process.arrivalTime <= time && process.progress < process.duration
+    );
+
+    if (!firstProcess) {
+      return null;
+    }
+
+    const remainingProcesses = sortedProcesses.filter(
+      (process) => process.id !== firstProcess.id
+    );
+
+    const shortestRemainingTime = remainingProcesses.find(
+      (process) =>
+        process.arrivalTime <= time &&
+        process.progress < process.duration &&
+        process.duration - process.progress <
+          firstProcess.duration - firstProcess.progress
+    );
+
+    return shortestRemainingTime || firstProcess;
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,10 +56,7 @@ export const Sjf = () => {
 
       setTime((time) => time + 1);
 
-      const firstProcess = processes.find(
-        (process) =>
-          process.arrivalTime <= time && process.progress < process.duration
-      );
+      const firstProcess = findShortestRemainingTime(processes);
 
       console.log(firstProcess, time);
 

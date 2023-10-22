@@ -2,6 +2,7 @@
 
 import { Fcfs } from "@/components/fcfs";
 import { Sjf } from "@/components/sjf";
+import { Srtf } from "@/components/srtf";
 import {
   Select,
   SelectTrigger,
@@ -73,7 +74,7 @@ export default function Home() {
 
       {selectedScheduler?.value === "fcfs" && <Fcfs />}
       {selectedScheduler?.value === "sjf" && <Sjf />}
-      {selectedScheduler?.value === "srtf" && <Fcfs />}
+      {selectedScheduler?.value === "srtf" && <Srtf />}
       {selectedScheduler?.value === "priority" && <Fcfs />}
       {selectedScheduler?.value === "rr" && <Fcfs />}
     </main>
