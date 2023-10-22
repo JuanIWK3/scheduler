@@ -3,14 +3,15 @@
 import { useResults } from "@/contexts/results";
 import { processosBasicos } from "@/processos";
 import { Process } from "@/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ProgressBar } from "../progress";
 
 export const Sjf = () => {
   const [time, setTime] = useState(0); // Tempo atual
-  const [processes, setProcesses] = useState<Process[]>(
-    processosBasicos().sort((a, b) => a.duration - b.duration)
-  ); // Processos
+  const processes = useMemo(
+    () => processosBasicos().sort((a, b) => a.arrivalTime - b.arrivalTime),
+    []
+  );
   const { setResults } = useResults();
   const [tempoDeEsperaTotal, setTempoDeEsperaTotal] = useState(0);
 
@@ -28,8 +29,6 @@ export const Sjf = () => {
 
   // Função que atualiza o tempo e o progresso dos processos
   useEffect(() => {
-    console.log("Time", time);
-
     // Intervalo de 1 segundo
     const interval = setInterval(() => {
       // Verifica se todos os processos foram concluídos
