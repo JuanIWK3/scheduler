@@ -9,6 +9,7 @@ import {
 
 type Result = {
   tempoMedio: number;
+  tempoTotal: number;
 };
 
 type ResultsContextType = {
@@ -29,15 +30,19 @@ const initialState = {
   results: {
     fcfs: {
       tempoMedio: 0,
+      tempoTotal: 0,
     },
     sjf: {
       tempoMedio: 0,
+      tempoTotal: 0,
     },
     srtf: {
       tempoMedio: 0,
+      tempoTotal: 0,
     },
     rr: {
       tempoMedio: 0,
+      tempoTotal: 0,
     },
   },
   setResults: () => {},

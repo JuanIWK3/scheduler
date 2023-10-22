@@ -16,6 +16,7 @@ export const Sjf = () => {
       ...results,
       sjf: {
         tempoMedio: time / processes.length,
+        tempoTotal: time,
       },
     }));
   };

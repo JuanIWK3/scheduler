@@ -6,13 +6,13 @@ export const Results = () => {
 
   return (
     <div className="w-full text-center ">
-      <p>Resultado</p>
-      {JSON.stringify(results)}
+      <h2 className="text-xl font-bold">Resultado</h2>
       <table className="w-full border">
         <thead>
           <tr className="border">
             <th>Escalonador</th>
             <th>Tempo Médio</th>
+            <th>Tempo Total</th>
           </tr>
         </thead>
         <tbody>
@@ -21,6 +21,7 @@ export const Results = () => {
               <tr className="border" key={key}>
                 <td className="border">{key}</td>
                 <td>{results[key].tempoMedio}</td>
+                <td>{results[key].tempoTotal}</td>
               </tr>
             );
           })}

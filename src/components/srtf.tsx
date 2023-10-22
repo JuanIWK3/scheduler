@@ -16,6 +16,7 @@ export const Srtf = () => {
       ...results,
       srtf: {
         tempoMedio: time / processes.length,
+        tempoTotal: time,
       },
     }));
   };

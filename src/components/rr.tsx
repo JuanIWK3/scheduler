@@ -15,8 +15,9 @@ export const RR = () => {
   const finish = () => {
     setResults((results) => ({
       ...results,
-      srtf: {
+      rr: {
         tempoMedio: time / processes.length,
+        tempoTotal: time,
       },
     }));
   };

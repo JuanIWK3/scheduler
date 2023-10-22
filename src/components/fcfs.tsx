@@ -16,6 +16,7 @@ export const Fcfs = () => {
       ...results,
       fcfs: {
         tempoMedio: time / processes.length,
+        tempoTotal: time,
       },
     }));
   };
