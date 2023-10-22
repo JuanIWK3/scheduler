@@ -1,6 +1,7 @@
 "use client";
 
 import { Fcfs } from "@/components/fcfs";
+import { Sjf } from "@/components/sjf";
 import {
   Select,
   SelectTrigger,
@@ -71,6 +72,10 @@ export default function Home() {
       </Select>
 
       {selectedScheduler?.value === "fcfs" && <Fcfs />}
+      {selectedScheduler?.value === "sjf" && <Sjf />}
+      {selectedScheduler?.value === "srtf" && <Fcfs />}
+      {selectedScheduler?.value === "priority" && <Fcfs />}
+      {selectedScheduler?.value === "rr" && <Fcfs />}
     </main>
   );
 }

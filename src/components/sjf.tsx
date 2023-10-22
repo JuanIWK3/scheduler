@@ -12,12 +12,14 @@ const initialProcesses: Process[] = [
   { id: 5, name: "P5", duration: 2, progress: 0, arrivalTime: 0 },
 ];
 
-export const Fcfs = () => {
+export const Sjf = () => {
   const [time, setTime] = useState(0);
   const [processes, setProcesses] = useState<Process[]>(initialProcesses);
 
   useEffect(() => {
     const interval = setInterval(() => {
+      processes.sort((a, b) => a.duration - b.duration);
+
       if (processes.every((process) => process.progress === process.duration)) {
         clearInterval(interval);
         return;
@@ -42,15 +44,17 @@ export const Fcfs = () => {
 
   return (
     <div className="w-full mt-8 gap-4 flex flex-col">
-      {processes.map((process) => (
-        <div key={process.name} className="border-b">
-          {process.name}{" "}
-          <ProgressBar
-            duration={process.duration}
-            progress={process.progress}
-          />
-        </div>
-      ))}
+      {processes
+        .sort((a, b) => a.id - b.id)
+        .map((process) => (
+          <div key={process.name} className="border-b">
+            {process.name}{" "}
+            <ProgressBar
+              duration={process.duration}
+              progress={process.progress}
+            />
+          </div>
+        ))}
       Total Time Taken: {time}
     </div>
   );
