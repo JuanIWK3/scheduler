@@ -8,15 +8,20 @@ import { useResults } from "@/contexts/results";
 
 export const Sjf = () => {
   const [time, setTime] = useState(0); // Tempo atual
-  const [processes, setProcesses] = useState<Process[]>(processosBasicos); // Processos
+  const [processes, setProcesses] = useState<Process[]>(
+    processosBasicos().sort((a, b) => a.duration - b.duration)
+  ); // Processos
   const { setResults } = useResults();
+  const [tempoDeEsperaTotal, setTempoDeEsperaTotal] = useState(0);
 
   const finish = () => {
     setResults((results) => ({
       ...results,
       sjf: {
-        tempoMedio: time / processes.length,
+        tempoMedio: (time + tempoDeEsperaTotal) / processes.length,
         tempoTotal: time,
+        numeroTrocasContexto: 0,
+        tempoMedioEspera: tempoDeEsperaTotal / processes.length,
       },
     }));
   };
@@ -25,8 +30,6 @@ export const Sjf = () => {
   useEffect(() => {
     // Intervalo de 1 segundo
     const interval = setInterval(() => {
-      processes.sort((a, b) => a.duration - b.duration);
-
       // Verifica se todos os processos foram concluídos
       if (processes.every((process) => process.progress === process.duration)) {
         finish();
@@ -43,22 +46,29 @@ export const Sjf = () => {
 
       if (firstProcess) {
         firstProcess.progress++;
+        if (firstProcess.duration === firstProcess.progress) {
+          const esperaTotal =
+            time - firstProcess.arrivalTime - firstProcess.duration + 1;
+          setTempoDeEsperaTotal((prev) => prev + esperaTotal);
+        }
       }
     }, 1000);
 
     return () => clearInterval(interval);
   }, [time]);
 
+  // Ordena os processos por id, sem atrapalhar a order da fila
+  const derivedProcesses = processes.map((p) => p);
+  derivedProcesses.sort((a, b) => a.id - b.id);
+
   return (
     <div className="w-full mt-8 gap-4 flex flex-col">
       <h2 className="text-lg font-bold">Shortest Job First</h2>
-      {processes
-        .sort((a, b) => a.id - b.id)
-        .map((process) => (
-          <div key={process.name} className="border-b">
-            <ProgressBar process={process} />
-          </div>
-        ))}
+      {derivedProcesses.map((process) => (
+        <div key={process.name} className="border-b">
+          <ProgressBar process={process} />
+        </div>
+      ))}
       Total Time Taken: {time}
     </div>
   );

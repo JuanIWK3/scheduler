@@ -10,13 +10,18 @@ export const Srtf = () => {
   const [time, setTime] = useState(0);
   const [processes, setProcesses] = useState<Process[]>(processosBasicos);
   const { setResults } = useResults();
+  const [tempoDeEsperaTotal, setTempoDeEsperaTotal] = useState(0);
+  const [trocasDeContexto, setTrocasDeContexto] = useState(0);
+  const [previousProcess, setPreviousProcess] = useState<Process | null>(null);
 
   const finish = () => {
     setResults((results) => ({
       ...results,
       srtf: {
-        tempoMedio: time / processes.length,
+        tempoMedio: (time + tempoDeEsperaTotal) / processes.length,
         tempoTotal: time,
+        numeroTrocasContexto: trocasDeContexto,
+        tempoMedioEspera: tempoDeEsperaTotal / processes.length,
       },
     }));
   };
@@ -47,6 +52,13 @@ export const Srtf = () => {
           firstProcess.duration - firstProcess.progress
     );
 
+    if (shortestRemainingTime) {
+      if (previousProcess?.id !== shortestRemainingTime.id) {
+        setTrocasDeContexto((prev) => prev + 1);
+      }
+      setPreviousProcess(shortestRemainingTime);
+    }
+
     return shortestRemainingTime || firstProcess;
   };
 
@@ -66,6 +78,11 @@ export const Srtf = () => {
 
       if (firstProcess) {
         firstProcess.progress++;
+        if (firstProcess.duration === firstProcess.progress) {
+          const esperaTotal =
+            time - firstProcess.arrivalTime - firstProcess.duration + 1;
+          setTempoDeEsperaTotal((prev) => prev + esperaTotal);
+        }
       }
     }, 1000);
 

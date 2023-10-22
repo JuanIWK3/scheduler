@@ -10,6 +10,8 @@ import {
 type Result = {
   tempoMedio: number;
   tempoTotal: number;
+  numeroTrocasContexto: number;
+  tempoMedioEspera: number;
 };
 
 type ResultsContextType = {
@@ -26,23 +28,31 @@ type ResultsContextType = {
   >;
 };
 
-const initialState = {
+const initialState: ResultsContextType = {
   results: {
     fcfs: {
       tempoMedio: 0,
       tempoTotal: 0,
+      numeroTrocasContexto: 0,
+      tempoMedioEspera: 0,
     },
     sjf: {
       tempoMedio: 0,
       tempoTotal: 0,
+      numeroTrocasContexto: 0,
+      tempoMedioEspera: 0,
     },
     srtf: {
       tempoMedio: 0,
       tempoTotal: 0,
+      numeroTrocasContexto: 0,
+      tempoMedioEspera: 0,
     },
     rr: {
       tempoMedio: 0,
       tempoTotal: 0,
+      numeroTrocasContexto: 0,
+      tempoMedioEspera: 0,
     },
   },
   setResults: () => {},

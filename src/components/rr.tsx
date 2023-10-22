@@ -11,15 +11,20 @@ export const RR = () => {
   const [processes, setProcesses] = useState<Process[]>(processosBasicos);
   const { setResults } = useResults();
   const quantum = 2;
+  const [tempoDeEsperaTotal, setTempoDeEsperaTotal] = useState(0);
+  const [trocasDeContexto, setTrocasDeContexto] = useState(0);
 
   const finish = () => {
     setResults((results) => ({
       ...results,
       rr: {
-        tempoMedio: time / processes.length,
+        tempoMedio: (time + tempoDeEsperaTotal) / processes.length,
         tempoTotal: time,
+        numeroTrocasContexto: trocasDeContexto,
+        tempoMedioEspera: tempoDeEsperaTotal / processes.length,
       },
     }));
+    console.log("Tempo de espera total", tempoDeEsperaTotal);
   };
 
   useEffect(() => {
@@ -41,11 +46,17 @@ export const RR = () => {
 
       if (firstProcess) {
         firstProcess.progress++;
+        if (firstProcess.duration === firstProcess.progress) {
+          const esperaTotal =
+            time - firstProcess.arrivalTime - firstProcess.duration + 1;
+          setTempoDeEsperaTotal((prev) => prev + esperaTotal);
+        }
       }
 
       if (internalTime === quantum - 1) {
-        console.log("pulando");
         internalTime = 0;
+
+        setTrocasDeContexto((prev) => prev + 1);
 
         processes.push(processes.shift()!);
         firstProcess = processes.find(

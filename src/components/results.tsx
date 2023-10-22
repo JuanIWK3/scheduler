@@ -13,6 +13,8 @@ export const Results = () => {
             <th>Escalonador</th>
             <th>Tempo Médio</th>
             <th>Tempo Total</th>
+            <th>Tempo Médio de Espera</th>
+            <th>Número de Trocas de Contexto</th>
           </tr>
         </thead>
         <tbody>
@@ -22,6 +24,8 @@ export const Results = () => {
                 <td className="border">{key}</td>
                 <td>{results[key].tempoMedio}</td>
                 <td>{results[key].tempoTotal}</td>
+                <td>{results[key].tempoMedioEspera}</td>
+                <td>{results[key].numeroTrocasContexto}</td>
               </tr>
             );
           })}
