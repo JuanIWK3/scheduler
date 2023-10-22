@@ -51,6 +51,8 @@ export const Fcfs = () => {
         </div>
       ))}
       Total Time Taken: {time}
+      <br />
+      {JSON.stringify(processes)}
     </div>
   );
 };
@@ -65,7 +67,7 @@ const ProgressBar = ({
   return (
     <div className="w-full h-2 bg-gray-200 rounded">
       <div
-        className="h-full bg-green-500 rounded"
+        className="h-full bg-green-500 rounded transition-all duration-500"
         style={{ width: `${(progress / duration) * 100}%` }}
       ></div>
     </div>

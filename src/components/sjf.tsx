@@ -67,9 +67,9 @@ const ProgressBar = ({
   progress: number;
 }) => {
   return (
-    <div className="w-full h-2 bg-gray-200 rounded">
+    <div className="w-full h-4 bg-gray-200 rounded">
       <div
-        className="h-full bg-green-500 rounded"
+        className="h-full bg-green-500 rounded transition-all duration-1000"
         style={{ width: `${(progress / duration) * 100}%` }}
       ></div>
     </div>
