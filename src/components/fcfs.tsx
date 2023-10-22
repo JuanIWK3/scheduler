@@ -3,7 +3,7 @@
 import { Process } from "@/types";
 import { useEffect, useState } from "react";
 import { ProgressBar } from "./progress";
-import { processosBasicos } from "@/app/processos";
+import { processosBasicos } from "@/processos";
 import { useResults } from "@/contexts/results";
 
 export const Fcfs = () => {
