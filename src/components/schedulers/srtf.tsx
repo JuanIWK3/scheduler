@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Process } from "@/types";
-import { ProgressBar } from "./progress";
-import { processosBasicos } from "@/processos";
 import { useResults } from "@/contexts/results";
+import {
+  incrementWaitTime,
+  processosBasicos,
+  sortByArrivalTime,
+  sortById,
+} from "@/processos";
+import { Process } from "@/types";
+import { useEffect, useState } from "react";
+import { ProgressBar } from "../progress";
 
 export const Srtf = () => {
   const [time, setTime] = useState(0);
@@ -27,9 +32,7 @@ export const Srtf = () => {
   };
 
   const findShortestRemainingTime = (processes: Process[]) => {
-    const sortedProcesses = processes.sort(
-      (a, b) => a.arrivalTime - b.arrivalTime
-    );
+    const sortedProcesses = sortByArrivalTime(processes);
 
     const firstProcess = sortedProcesses.find(
       (process) =>
@@ -66,6 +69,7 @@ export const Srtf = () => {
     const interval = setInterval(() => {
       processes.sort((a, b) => a.duration - b.duration);
 
+      // Verifica se todos os processos foram concluídos
       if (processes.every((process) => process.progress === process.duration)) {
         finish();
         clearInterval(interval);
@@ -78,10 +82,10 @@ export const Srtf = () => {
 
       if (firstProcess) {
         firstProcess.progress++;
+        // Se o processo acabou, incrementa no tempo de espera o tempo que o processo
+        // demorou a mais para ser concluído
         if (firstProcess.duration === firstProcess.progress) {
-          const esperaTotal =
-            time - firstProcess.arrivalTime - firstProcess.duration + 1;
-          setTempoDeEsperaTotal((prev) => prev + esperaTotal);
+          incrementWaitTime(time, firstProcess, setTempoDeEsperaTotal);
         }
       }
     }, 1000);
@@ -89,16 +93,18 @@ export const Srtf = () => {
     return () => clearInterval(interval);
   }, [time]);
 
+  // Ordena os processos por id, sem atrapalhar a order da fila
+  const derivedProcesses = processes.map((p) => p);
+  sortById(derivedProcesses);
+
   return (
     <div className="w-full mt-8 gap-4 flex flex-col">
       <h2 className="text-lg font-bold">Shortest Remaining Time First</h2>
-      {processes
-        .sort((a, b) => a.id - b.id)
-        .map((process) => (
-          <div key={process.name} className="border-b">
-            <ProgressBar process={process} />
-          </div>
-        ))}
+      {derivedProcesses.map((process) => (
+        <div key={process.name} className="border-b">
+          <ProgressBar process={process} />
+        </div>
+      ))}
       Total Time Taken: {time}
     </div>
   );

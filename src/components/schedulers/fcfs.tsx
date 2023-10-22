@@ -2,8 +2,13 @@
 
 import { Process } from "@/types";
 import { useEffect, useState } from "react";
-import { ProgressBar } from "./progress";
-import { processosBasicos } from "@/processos";
+import { ProgressBar } from "../progress";
+import {
+  incrementWaitTime,
+  isFinished,
+  processosBasicos,
+  sortById,
+} from "@/processos";
 import { useResults } from "@/contexts/results";
 
 export const Fcfs = () => {
@@ -49,10 +54,10 @@ export const Fcfs = () => {
       // Atualiza o progresso do processo
       if (firstProcess) {
         firstProcess.progress++;
+        // Se o processo acabou, incrementa no tempo de espera o tempo que o processo
+        // demorou a mais para ser concluído
         if (firstProcess.duration === firstProcess.progress) {
-          const esperaTotal =
-            time - firstProcess.arrivalTime - firstProcess.duration + 1;
-          setTempoDeEsperaTotal((prev) => prev + esperaTotal);
+          incrementWaitTime(time, firstProcess, setTempoDeEsperaTotal);
         }
       }
     }, 1000);
@@ -63,7 +68,7 @@ export const Fcfs = () => {
 
   // Ordena os processos por id, sem atrapalhar a order da fila
   const derivedProcesses = processes.map((p) => p);
-  derivedProcesses.sort((a, b) => a.id - b.id);
+  sortById(derivedProcesses);
 
   // Renderiza o escalonador
   return (

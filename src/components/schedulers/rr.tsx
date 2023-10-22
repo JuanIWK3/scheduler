@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Process } from "@/types";
-import { ProgressBar } from "./progress";
-import { processosBasicos } from "@/processos";
+import { ProgressBar } from "../progress";
+import {
+  incrementWaitTime,
+  isFinished,
+  processosBasicos,
+  sortById,
+} from "@/processos";
 import { useResults } from "@/contexts/results";
 
 export const RR = () => {
@@ -30,6 +35,7 @@ export const RR = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       let internalTime = time % quantum;
+      // Verifica se todos os processos foram concluídos
       if (processes.every((process) => process.progress === process.duration)) {
         finish();
         clearInterval(interval);
@@ -46,10 +52,10 @@ export const RR = () => {
 
       if (firstProcess) {
         firstProcess.progress++;
+        // Se o processo acabou, incrementa no tempo de espera o tempo que o processo
+        // demorou a mais para ser concluído
         if (firstProcess.duration === firstProcess.progress) {
-          const esperaTotal =
-            time - firstProcess.arrivalTime - firstProcess.duration + 1;
-          setTempoDeEsperaTotal((prev) => prev + esperaTotal);
+          incrementWaitTime(time, firstProcess, setTempoDeEsperaTotal);
         }
       }
 
@@ -71,7 +77,7 @@ export const RR = () => {
 
   // Ordena os processos por id, sem atrapalhar a order da fila
   const derivedProcesses = processes.map((p) => p);
-  derivedProcesses.sort((a, b) => a.id - b.id);
+  sortById(derivedProcesses);
 
   return (
     <div className="w-full mt-8 gap-4 flex flex-col">

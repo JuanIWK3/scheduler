@@ -1,21 +1,11 @@
 "use client";
 
-import { Fcfs } from "@/components/fcfs";
 import { Results } from "@/components/results";
-import { RR } from "@/components/rr";
-import { Sjf } from "@/components/sjf";
-import { Srtf } from "@/components/srtf";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-} from "@/components/ui/select";
+import { Fcfs } from "@/components/schedulers/fcfs";
+import { RR } from "@/components/schedulers/rr";
+import { Sjf } from "@/components/schedulers/sjf";
+import { Srtf } from "@/components/schedulers/srtf";
 import { ResultsProvider } from "@/contexts/results";
-import Image from "next/image";
 import { useState } from "react";
 
 type Scheduler = {
@@ -25,33 +15,6 @@ type Scheduler = {
 
 // Página Inicial
 export default function Home() {
-  const [selectedScheduler, setSelectedScheduler] = useState<Scheduler>();
-
-  // Array de escalonadores
-  const schedulers: Scheduler[] = [
-    {
-      name: "First Come First Serve",
-      value: "fcfs",
-    },
-    {
-      name: "Shortest Job First",
-      value: "sjf",
-    },
-    {
-      name: "Shortest Remaining Time First",
-      value: "srtf",
-    },
-    {
-      name: "Priority Scheduling",
-      value: "priority",
-    },
-    {
-      name: "Round Robin",
-      value: "rr",
-    },
-  ];
-
-  // Html retornado
   return (
     <main className="flex min-h-screen gap-16 flex-col items-center p-24">
       <h1 className="text-xl font-bold">Escalonadores</h1>
